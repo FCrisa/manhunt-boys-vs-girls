@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.clock.ServerClockManager;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -71,9 +72,13 @@ public final class GameManager {
 		UpgradeManager.onGameStart();
 		TeamManager.ensureScoreboardTeams(server);
 
-		// Dia, para comecar sem mobs em cima de todo mundo.
+		// Dia, para comecar sem mobs em cima de todo mundo. No 26.2 o horario do mundo
+		// e controlado por "clocks" por tipo de dimensao, nao mais por setDayTime.
+		ServerClockManager clocks = server.clockManager();
+
 		for (ServerLevel level : server.getAllLevels()) {
-			level.setDayTime(MORNING);
+			level.dimensionTypeRegistration().value().defaultClock()
+					.ifPresent(clock -> clocks.setTotalTicks(clock, MORNING));
 		}
 
 		for (ServerPlayer player : server.getPlayerList().getPlayers()) {

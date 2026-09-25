@@ -3,7 +3,7 @@ package com.opatosan.opdropmanhunt.opdrop;
 import java.util.List;
 
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
@@ -32,10 +32,10 @@ public final class OpTargets {
 			OpTarget.tag("Leaves", 1, Level.OVERWORLD, BlockTags.LEAVES),
 			OpTarget.blocks("Sugar Cane", 1, Level.OVERWORLD, Blocks.SUGAR_CANE),
 			OpTarget.blocks("Coal Ore", 1, Level.OVERWORLD, Blocks.COAL_ORE, Blocks.DEEPSLATE_COAL_ORE),
-			OpTarget.mob("Cow", 1, Level.OVERWORLD, EntityType.COW),
-			OpTarget.mob("Pig", 1, Level.OVERWORLD, EntityType.PIG),
-			OpTarget.mob("Sheep", 1, Level.OVERWORLD, EntityType.SHEEP),
-			OpTarget.mob("Chicken", 1, Level.OVERWORLD, EntityType.CHICKEN),
+			OpTarget.mob("Cow", 1, Level.OVERWORLD, EntityTypes.COW),
+			OpTarget.mob("Pig", 1, Level.OVERWORLD, EntityTypes.PIG),
+			OpTarget.mob("Sheep", 1, Level.OVERWORLD, EntityTypes.SHEEP),
+			OpTarget.mob("Chicken", 1, Level.OVERWORLD, EntityTypes.CHICKEN),
 
 			// Dificuldade 2
 			OpTarget.blocks("Copper Ore", 2, Level.OVERWORLD, Blocks.COPPER_ORE, Blocks.DEEPSLATE_COPPER_ORE),
@@ -43,20 +43,20 @@ public final class OpTargets {
 			OpTarget.blocks("Pumpkin", 2, Level.OVERWORLD, Blocks.PUMPKIN),
 			OpTarget.blocks("Melon", 2, Level.OVERWORLD, Blocks.MELON),
 			OpTarget.blocks("Deepslate", 2, Level.OVERWORLD, Blocks.DEEPSLATE),
-			OpTarget.mob("Zombie", 2, Level.OVERWORLD, EntityType.ZOMBIE),
-			OpTarget.mob("Skeleton", 2, Level.OVERWORLD, EntityType.SKELETON),
-			OpTarget.mob("Spider", 2, Level.OVERWORLD, EntityType.SPIDER),
-			OpTarget.mob("Creeper", 2, Level.OVERWORLD, EntityType.CREEPER),
-			OpTarget.mob("Drowned", 2, Level.OVERWORLD, EntityType.DROWNED),
+			OpTarget.mob("Zombie", 2, Level.OVERWORLD, EntityTypes.ZOMBIE),
+			OpTarget.mob("Skeleton", 2, Level.OVERWORLD, EntityTypes.SKELETON),
+			OpTarget.mob("Spider", 2, Level.OVERWORLD, EntityTypes.SPIDER),
+			OpTarget.mob("Creeper", 2, Level.OVERWORLD, EntityTypes.CREEPER),
+			OpTarget.mob("Drowned", 2, Level.OVERWORLD, EntityTypes.DROWNED),
 
 			// Dificuldade 3
 			OpTarget.blocks("Gold Ore", 3, Level.OVERWORLD, Blocks.GOLD_ORE, Blocks.DEEPSLATE_GOLD_ORE),
 			OpTarget.blocks("Redstone Ore", 3, Level.OVERWORLD, Blocks.REDSTONE_ORE, Blocks.DEEPSLATE_REDSTONE_ORE),
 			OpTarget.blocks("Lapis Ore", 3, Level.OVERWORLD, Blocks.LAPIS_ORE, Blocks.DEEPSLATE_LAPIS_ORE),
 			OpTarget.blocks("Diamond Ore", 3, Level.OVERWORLD, Blocks.DIAMOND_ORE, Blocks.DEEPSLATE_DIAMOND_ORE),
-			OpTarget.mob("Enderman", 3, Level.OVERWORLD, EntityType.ENDERMAN),
-			OpTarget.mob("Witch", 3, Level.OVERWORLD, EntityType.WITCH),
-			OpTarget.mob("Slime", 3, Level.OVERWORLD, EntityType.SLIME),
+			OpTarget.mob("Enderman", 3, Level.OVERWORLD, EntityTypes.ENDERMAN),
+			OpTarget.mob("Witch", 3, Level.OVERWORLD, EntityTypes.WITCH),
+			OpTarget.mob("Slime", 3, Level.OVERWORLD, EntityTypes.SLIME),
 
 			// ---------------------------------------------------------- NETHER
 
@@ -67,29 +67,29 @@ public final class OpTargets {
 			OpTarget.blocks("Nether Gold Ore", 1, Level.NETHER, Blocks.NETHER_GOLD_ORE),
 			OpTarget.blocks("Crimson Stem", 1, Level.NETHER, Blocks.CRIMSON_STEM),
 			OpTarget.blocks("Warped Stem", 1, Level.NETHER, Blocks.WARPED_STEM),
-			OpTarget.mob("Zombified Piglin", 1, Level.NETHER, EntityType.ZOMBIFIED_PIGLIN),
+			OpTarget.mob("Zombified Piglin", 1, Level.NETHER, EntityTypes.ZOMBIFIED_PIGLIN),
 
 			// Dificuldade 2
 			OpTarget.blocks("Glowstone", 2, Level.NETHER, Blocks.GLOWSTONE),
 			OpTarget.blocks("Magma Block", 2, Level.NETHER, Blocks.MAGMA_BLOCK),
 			OpTarget.blocks("Basalt", 2, Level.NETHER, Blocks.BASALT),
 			OpTarget.blocks("Blackstone", 2, Level.NETHER, Blocks.BLACKSTONE),
-			OpTarget.mob("Piglin", 2, Level.NETHER, EntityType.PIGLIN),
-			OpTarget.mob("Magma Cube", 2, Level.NETHER, EntityType.MAGMA_CUBE),
-			OpTarget.mob("Strider", 2, Level.NETHER, EntityType.STRIDER),
+			OpTarget.mob("Piglin", 2, Level.NETHER, EntityTypes.PIGLIN),
+			OpTarget.mob("Magma Cube", 2, Level.NETHER, EntityTypes.MAGMA_CUBE),
+			OpTarget.mob("Strider", 2, Level.NETHER, EntityTypes.STRIDER),
 
 			// Dificuldade 3
 			OpTarget.blocks("Ancient Debris", 3, Level.NETHER, Blocks.ANCIENT_DEBRIS),
-			OpTarget.mob("Blaze", 3, Level.NETHER, EntityType.BLAZE),
-			OpTarget.mob("Wither Skeleton", 3, Level.NETHER, EntityType.WITHER_SKELETON),
-			OpTarget.mob("Ghast", 3, Level.NETHER, EntityType.GHAST),
-			OpTarget.mob("Hoglin", 3, Level.NETHER, EntityType.HOGLIN),
+			OpTarget.mob("Blaze", 3, Level.NETHER, EntityTypes.BLAZE),
+			OpTarget.mob("Wither Skeleton", 3, Level.NETHER, EntityTypes.WITHER_SKELETON),
+			OpTarget.mob("Ghast", 3, Level.NETHER, EntityTypes.GHAST),
+			OpTarget.mob("Hoglin", 3, Level.NETHER, EntityTypes.HOGLIN),
 
 			// ------------------------------------------------------------- END
 
 			OpTarget.blocks("End Stone", OpTarget.ANY_DIFFICULTY, Level.END, Blocks.END_STONE),
 			OpTarget.blocks("Obsidian", OpTarget.ANY_DIFFICULTY, Level.END, Blocks.OBSIDIAN),
-			OpTarget.mob("Enderman", OpTarget.ANY_DIFFICULTY, Level.END, EntityType.ENDERMAN)
+			OpTarget.mob("Enderman", OpTarget.ANY_DIFFICULTY, Level.END, EntityTypes.ENDERMAN)
 	);
 
 	/**

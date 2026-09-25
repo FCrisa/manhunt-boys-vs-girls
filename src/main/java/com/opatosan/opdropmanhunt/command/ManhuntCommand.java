@@ -279,7 +279,7 @@ public final class ManhuntCommand {
 		} else {
 			source.sendSuccess(() -> Component.literal("Alvo OP: ").withStyle(ChatFormatting.GRAY)
 					.append(Component.literal(target.displayName()).withStyle(ChatFormatting.GREEN))
-					.append(Component.literal(" (" + target.dimension().location() + ")")
+					.append(Component.literal(" (" + target.dimension().identifier() + ")")
 							.withStyle(ChatFormatting.DARK_GRAY)), false);
 			source.sendSuccess(() -> Component.literal("Runners veem: ").withStyle(ChatFormatting.GRAY)
 					.append(Component.literal(OpDropManager.maskedName()).withStyle(ChatFormatting.GREEN))

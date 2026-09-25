@@ -154,7 +154,7 @@ public final class OpDropManager {
 		}
 
 		if (candidates.isEmpty()) {
-			OpDropManhunt.LOGGER.warn("Nenhum alvo OP disponivel para a dimensao {}", dimension.location());
+			OpDropManhunt.LOGGER.warn("Nenhum alvo OP disponivel para a dimensao {}", dimension.identifier());
 			return;
 		}
 
@@ -184,7 +184,7 @@ public final class OpDropManager {
 	}
 
 	private static String key(OpTarget target) {
-		return target.dimension().location() + "/" + target.displayName();
+		return target.dimension().identifier() + "/" + target.displayName();
 	}
 
 	private static void setTarget(OpTarget target) {
@@ -199,7 +199,7 @@ public final class OpDropManager {
 		}
 
 		OpDropManhunt.LOGGER.info("Novo alvo OP: {} ({}), tier {}",
-				target.displayName(), target.dimension().location(), GameState.get().dropTier());
+				target.displayName(), target.dimension().identifier(), GameState.get().dropTier());
 	}
 
 	// ------------------------------------------------------------------ tick
