@@ -1,0 +1,26 @@
+{
+	"schemaVersion": 1,
+	"id": "opdropmanhunt",
+	"version": "${version}",
+	"name": "OP Drop Manhunt",
+	"description": "Manhunt com OP Drops: um bloco ou mob secreto dropa itens muito fortes para os Runners, e tudo fica mais forte com o tempo.",
+	"authors": [
+		"opatosan"
+	],
+	"license": "All Rights Reserved",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.opatosan.opdropmanhunt.OpDropManhunt"
+		]
+	},
+	"mixins": [
+		"opdropmanhunt.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

@@ -1,0 +1,20 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# Loom
+.fabric/
+remappedSrc/
+run/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.eclipse/
+.settings/
+.classpath
+.project
