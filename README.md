@@ -35,15 +35,14 @@ client-only: só itens e componentes vanilla, títulos, action bar, chat e sons.
 O `.jar` final sai em `build/libs/opdropmanhunt-1.0.0.jar`. Instale ele junto com a
 **Fabric API** na pasta `mods/`.
 
+Como o 26.2 não é mais ofuscado, não existe etapa de `remapJar`: o jar de `build/libs`
+já é o artefato instalável.
+
 Para testar no jogo:
 
 ```bash
 ./gradlew runClient
 ```
-
-> **Atenção:** o build precisa baixar o Fabric Loom de `maven.fabricmc.net` e o
-> Minecraft de `piston-data.mojang.com`. Veja a seção
-> [Estado do build](#estado-do-build) no final.
 
 ---
 
@@ -247,29 +246,36 @@ Dica para testar rápido: baixe `upgradeIntervalSeconds` para `30` e
 
 ## Estado do build
 
-O código está completo, mas **o `./gradlew build` não chegou a rodar no ambiente onde o
-mod foi escrito**: a política de rede daquele ambiente bloqueia `maven.fabricmc.net`
-(de onde vem o Fabric Loom) e `piston-data.mojang.com` (de onde vem o Minecraft), então
-o Gradle falha logo na resolução do plugin.
+`./gradlew build` **compila limpo** contra o Minecraft 26.2, sem warnings, e gera
+`build/libs/opdropmanhunt-1.0.0.jar`.
 
-Na sua máquina, com acesso normal à internet, é só rodar `./gradlew build`.
+O que ainda **não** foi feito: o checklist de teste acima, jogando. Ele depende de
+entrar no mundo com mais de um jogador, então fica com você.
 
-O que foi verificado sem compilar:
+### Mudanças de API do 26.2 que pegaram o código
 
-- Versões de Minecraft, Loader, Loom e Fabric API tiradas do `fabric-example-mod`
-  oficial, branch `26.2`.
-- Todos os IDs de item, bloco, entidade, encantamento, poção e componente conferidos
-  contra o registro gerado do **26.2** (`stone_spear`, `copper_spear`, armaduras de
-  cobre, `mace`, `wind_charge`, `ender_eye`, etc.).
-- Nomes de classes e métodos do 26.2 (`TeamColor`, `Commands.hasPermission`,
-  `LodestoneTracker`, `CustomData`, `getKillCredit`) conferidos contra o mod de
-  Manhunt anterior, decompilado.
-- Assinatura de `PlayerBlockBreakEvents.AFTER` conferida no código-fonte da Fabric API
-  na branch `26.2`.
-- Sintaxe dos 18 arquivos e consistência das chamadas entre as classes do mod
-  checadas com parser.
+Vale anotar, porque quebram qualquer coisa escrita com a cabeça na 1.21:
 
-Se algum import do Minecraft não bater na primeira compilação, o candidato mais
-provável é `net.minecraft.world.entity.projectile.FireworkRocketEntity`
-(em `game/GameManager.java`), usado só nos fogos da vitória dos Runners — no 26.2
-algumas classes de projétil foram movidas para subpacotes.
+| Antes | No 26.2 |
+|---|---|
+| `ResourceLocation` | `net.minecraft.resources.Identifier` |
+| `ResourceKey.location()` | `ResourceKey.identifier()` |
+| `EntityType.COW` | `EntityTypes.COW` (as constantes saíram de `EntityType`) |
+| `Level.setDayTime(long)` | sistema de clocks: `server.clockManager().setTotalTicks(clock, ticks)` |
+| `PlayerTeam.setColor(ChatFormatting)` | `setColor(Optional<TeamColor>)` |
+| `source.hasPermission(2)` | `Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)` |
+
+O horário do mundo foi o mais invasivo: no 26.2 cada tipo de dimensão tem um clock
+próprio, e o `/manhunt start` pega o clock padrão da dimensão
+(`level.dimensionTypeRegistration().value().defaultClock()`) e adianta ele, que é
+exatamente o caminho que o `/time set` usa.
+
+### Verificações feitas
+
+- IDs de item, bloco, entidade, encantamento, poção e componente conferidos contra o
+  registro gerado do 26.2 (`stone_spear` e `copper_spear` existem; "Eye of Ender" é
+  `ender_eye`, não `eye_of_ender`).
+- Alvo do mixin conferido no jar real: `ServerPlayer.drop(ItemStack, boolean, boolean)`
+  existe, e `Inventory.dropAll()` passa por ele — que é o que garante que a bússola e a
+  armadura não caem na morte. Isso é uma string no `@Inject`, então o compilador não
+  checa: se um dia parar de bater, o mod quebra ao carregar, não ao compilar.
