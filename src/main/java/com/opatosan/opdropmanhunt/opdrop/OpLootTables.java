@@ -304,19 +304,25 @@ public final class OpLootTables {
 	 * e devolve todos os itens gerados.
 	 */
 	public static List<ItemStack> roll(int tier, int entryCount, RollContext ctx) {
-		List<Entry> pool = new ArrayList<>(forTier(tier));
+		List<Entry> tierPool = forTier(tier);
+		List<Entry> remaining = new ArrayList<>(tierPool);
 		List<ItemStack> result = new ArrayList<>();
-		int draws = Math.min(entryCount, pool.size());
 
-		for (int i = 0; i < draws; i++) {
-			Entry entry = pickWeighted(pool, ctx.random());
+		for (int i = 0; i < entryCount; i++) {
+			// Nos tiers altos o numero de entradas pedido pode passar do tamanho da
+			// pool. Em vez de cortar o drop, reabastece: as entradas so comecam a
+			// repetir depois que a pool inteira ja saiu uma vez.
+			if (remaining.isEmpty()) {
+				remaining.addAll(tierPool);
+			}
+
+			Entry entry = pickWeighted(remaining, ctx.random());
 
 			if (entry == null) {
 				break;
 			}
 
-			// Sem repetir a mesma entrada no mesmo drop.
-			pool.remove(entry);
+			remaining.remove(entry);
 			result.addAll(entry.factory().create(ctx));
 		}
 

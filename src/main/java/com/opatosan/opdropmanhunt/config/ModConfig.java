@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 
 import com.opatosan.opdropmanhunt.OpDropManhunt;
+import com.opatosan.opdropmanhunt.game.GameState;
 
 /**
  * Configuracao do mod, em {@code config/opdropmanhunt.json}.
@@ -30,8 +31,14 @@ public final class ModConfig {
 	/** Intervalo entre revelacoes de letra do alvo OP para os Runners, em segundos. */
 	public int letterRevealIntervalSeconds = 60;
 
-	/** Quantas entradas diferentes cada OP drop sorteia da pool do tier. */
-	public int entriesPerDrop = 3;
+	/**
+	 * Quantas entradas cada OP drop sorteia, por tier (indice 0 = tier 1).
+	 *
+	 * <p>Sobe junto com o tier: 6 no tier 1 ate 12 no tier 6. Se o valor passar do
+	 * tamanho da pool do tier, a pool e reabastecida e algumas entradas repetem no
+	 * mesmo drop -- veja {@code OpLootTables.roll}.</p>
+	 */
+	public int[] entriesPerDropByTier = {6, 7, 8, 10, 11, 12};
 
 	/** Chance (0.0 - 1.0) de um encantamento marcado "ate nivel X" aparecer no item. */
 	public double upToEnchantChance = 0.7;
@@ -62,7 +69,10 @@ public final class ModConfig {
 				ModConfig loaded = GSON.fromJson(reader, ModConfig.class);
 
 				if (loaded != null) {
-					loaded.sanitize();
+					if (loaded.sanitize()) {
+						loaded.save();
+					}
+
 					return loaded;
 				}
 			} catch (IOException | RuntimeException e) {
@@ -75,12 +85,30 @@ public final class ModConfig {
 		return defaults;
 	}
 
-	/** Mantem os valores dentro de faixas utilizaveis. */
-	private void sanitize() {
+	/** Mantem os valores dentro de faixas utilizaveis. Retorna true se precisou corrigir. */
+	private boolean sanitize() {
 		this.upgradeIntervalSeconds = Math.max(1, this.upgradeIntervalSeconds);
 		this.letterRevealIntervalSeconds = Math.max(1, this.letterRevealIntervalSeconds);
-		this.entriesPerDrop = Math.max(1, this.entriesPerDrop);
 		this.upToEnchantChance = Math.clamp(this.upToEnchantChance, 0.0, 1.0);
+
+		// Config antigo (de antes da escala por tier) nao tem a lista: usa o padrao e
+		// regrava o arquivo, para o campo novo aparecer para edicao.
+		if (this.entriesPerDropByTier == null || this.entriesPerDropByTier.length != GameState.MAX_DROP_TIER) {
+			this.entriesPerDropByTier = new int[] {6, 7, 8, 10, 11, 12};
+			return true;
+		}
+
+		for (int i = 0; i < this.entriesPerDropByTier.length; i++) {
+			this.entriesPerDropByTier[i] = Math.max(1, this.entriesPerDropByTier[i]);
+		}
+
+		return false;
+	}
+
+	/** Entradas sorteadas no tier informado (1 a 6). */
+	public int entriesForTier(int tier) {
+		int index = Math.clamp(tier - 1, 0, this.entriesPerDropByTier.length - 1);
+		return this.entriesPerDropByTier[index];
 	}
 
 	public void save() {

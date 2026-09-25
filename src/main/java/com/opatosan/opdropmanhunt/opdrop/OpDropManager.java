@@ -262,7 +262,7 @@ public final class OpDropManager {
 		OpLootTables.RollContext ctx = new OpLootTables.RollContext(
 				random, Enchanting.lookup(level), config.upToEnchantChance);
 
-		List<ItemStack> loot = OpLootTables.roll(state.dropTier(), config.entriesPerDrop, ctx);
+		List<ItemStack> loot = OpLootTables.roll(state.dropTier(), config.entriesForTier(state.dropTier()), ctx);
 
 		for (ItemStack stack : loot) {
 			spawnItem(level, position, stack, random);

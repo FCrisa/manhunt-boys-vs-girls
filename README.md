@@ -175,7 +175,7 @@ O arquivo `config/opdropmanhunt.json` é criado com os padrões na primeira exec
 {
   "upgradeIntervalSeconds": 600,
   "letterRevealIntervalSeconds": 60,
-  "entriesPerDrop": 3,
+  "entriesPerDropByTier": [6, 7, 8, 10, 11, 12],
   "upToEnchantChance": 0.7
 }
 ```
@@ -184,8 +184,29 @@ O arquivo `config/opdropmanhunt.json` é criado com os padrões na primeira exec
 |---|---|
 | `upgradeIntervalSeconds` | Intervalo entre upgrades de armadura / tier |
 | `letterRevealIntervalSeconds` | Intervalo entre revelações de letra |
-| `entriesPerDrop` | Quantas entradas diferentes cada drop sorteia |
+| `entriesPerDropByTier` | Entradas sorteadas por drop, uma por tier (índice 0 = tier 1) |
 | `upToEnchantChance` | Chance de um encantamento "até nível X" aparecer |
+
+### Quanto cai por tier
+
+Com os valores padrão, e lembrando que algumas entradas soltam dois itens
+(arco + flecha, mace + wind charge, elytra + foguetes):
+
+| Tier | Pool | Sorteios | Itens por drop | Variedade |
+|---|---|---|---|---|
+| 1 | 8 | 6 | 6 | 6 de 8 |
+| 2 | 8 | 7 | 7–8 | 7 de 8 |
+| 3 | 8 | 8 | 9 | **pool inteira toda vez** |
+| 4 | 11 | 10 | 10 | 10 de 11 |
+| 5 | 12 | 11 | 11–13 | 11 de 12 |
+| 6 | 10 | 12 | 13–14 | **pool inteira + 2 repetidas** |
+
+Nos tiers 3 e 6 o número de sorteios alcança (ou passa) o tamanho da pool, então o
+drop deixa de ser surpresa: sai a tabela inteira. No tier 6, como o pedido passa da
+pool, ela é reabastecida e duas entradas repetem — as quantidades e os encantamentos
+continuam sorteados, mas a lista de itens é sempre a mesma. Se quiser variedade de
+volta nesses dois tiers, o caminho é baixar o valor no config ou aumentar a pool em
+`OpLootTables.java`.
 
 O arquivo é relido no `/manhunt start`, então dá para editar entre partidas sem
 reiniciar o servidor.
