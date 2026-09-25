@@ -49,6 +49,9 @@ public final class OpLootTables {
 	private static final int W_FOOD = 4;
 	private static final int W_ORE = 4;
 
+	/** Peso para o item "assinatura" de um tier, que deve aparecer na maioria dos drops. */
+	private static final int W_SIGNATURE = 25;
+
 	// ------------------------------------------------------------------- sets
 
 	private static final Item[] LEATHER_SET = {
@@ -166,7 +169,8 @@ public final class OpLootTables {
 
 	private static final List<Entry> TIER_6 = List.of(
 			armor(W_GEAR, NETHERITE_SET, upTo(Enchantments.PROTECTION, 5), upTo(Enchantments.UNBREAKING, 3)),
-			gear(W_GEAR, Items.NETHERITE_SWORD,
+			// Item assinatura do tier final: peso alto de proposito.
+			gear(W_SIGNATURE, Items.NETHERITE_SWORD,
 					fixed(Enchantments.SHARPNESS, 4), fixed(Enchantments.FIRE_ASPECT, 2), fixed(Enchantments.KNOCKBACK, 2)),
 			gear(W_GEAR, Items.NETHERITE_PICKAXE,
 					fixed(Enchantments.EFFICIENCY, 5), fixed(Enchantments.UNBREAKING, 3), fixed(Enchantments.FORTUNE, 3)),
@@ -217,9 +221,27 @@ public final class OpLootTables {
 		return new EnchantSpec(key, level, false);
 	}
 
-	/** Contexto de um sorteio: random, registry de encantamentos e a chance configurada. */
+	/** Contexto de um sorteio: random, registry de encantamentos e as chances configuradas. */
 	public record RollContext(RandomSource random, HolderLookup.RegistryLookup<Enchantment> enchantments,
-			double upToChance) {
+			double upToChance, double extraArmorPieceChance) {
+
+		/**
+		 * Peças de armadura de um set: uma garantida, e cada peça a mais entra com
+		 * {@code extraArmorPieceChance}. Os slots (capacete, peitoral, calça, bota) são
+		 * sorteados sem repetir, então no máximo sai o set completo.
+		 */
+		public List<ItemStack> armorPieces(Item[] set, EnchantSpec... specs) {
+			List<Item> slots = new ArrayList<>(List.of(set));
+			List<ItemStack> pieces = new ArrayList<>();
+
+			while (true) {
+				pieces.add(enchanted(slots.remove(this.random.nextInt(slots.size())), specs));
+
+				if (slots.isEmpty() || this.random.nextDouble() >= this.extraArmorPieceChance) {
+					return pieces;
+				}
+			}
+		}
 
 		/** Quantidade aleatoria entre min e max (inclusivo). */
 		public int count(int min, int max) {
@@ -266,9 +288,12 @@ public final class OpLootTables {
 		return new Entry(weight, ctx -> List.of(ctx.enchanted(item, specs)));
 	}
 
-	/** Uma peca aleatoria do set de armadura, com encantamentos. */
+	/**
+	 * Pecas do set de armadura: uma garantida, com chance de vir mais (ate o set
+	 * completo). Veja {@link RollContext#armorPieces}.
+	 */
 	private static Entry armor(int weight, Item[] set, EnchantSpec... specs) {
-		return new Entry(weight, ctx -> List.of(ctx.enchanted(ctx.pick(set), specs)));
+		return new Entry(weight, ctx -> ctx.armorPieces(set, specs));
 	}
 
 	/** Um tipo aleatorio de comida cozida, na quantidade do tier. */

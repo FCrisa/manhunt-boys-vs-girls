@@ -47,6 +47,15 @@ public final class ModConfig {
 	/** Chance (0.0 - 1.0) de um encantamento marcado "ate nivel X" aparecer no item. */
 	public double upToEnchantChance = 0.7;
 
+	/**
+	 * Chance (0.0 - 1.0) de a entrada de armadura soltar mais uma peca.
+	 *
+	 * <p>Uma peca vem sempre; cada peca a mais passa por esta chance, sorteando entre
+	 * os quatro slots sem repetir. Com o padrao 0.5: ~50% 1 peca, ~25% 2, ~12,5% 3 e
+	 * ~12,5% o set completo. Vale para todos os tiers.</p>
+	 */
+	public double extraArmorPieceChance = 0.5;
+
 	public static ModConfig get() {
 		if (instance == null) {
 			instance = load();
@@ -94,6 +103,7 @@ public final class ModConfig {
 		this.upgradeIntervalSeconds = Math.max(1, this.upgradeIntervalSeconds);
 		this.letterRevealIntervalSeconds = Math.max(1, this.letterRevealIntervalSeconds);
 		this.upToEnchantChance = Math.clamp(this.upToEnchantChance, 0.0, 1.0);
+		this.extraArmorPieceChance = Math.clamp(this.extraArmorPieceChance, 0.0, 1.0);
 
 		// Config antigo (de antes da escala por tier) nao tem a lista: usa o padrao e
 		// regrava o arquivo, para o campo novo aparecer para edicao.

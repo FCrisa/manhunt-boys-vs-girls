@@ -260,7 +260,7 @@ public final class OpDropManager {
 		RandomSource random = level.getRandom();
 
 		OpLootTables.RollContext ctx = new OpLootTables.RollContext(
-				random, Enchanting.lookup(level), config.upToEnchantChance);
+				random, Enchanting.lookup(level), config.upToEnchantChance, config.extraArmorPieceChance);
 
 		List<ItemStack> loot = OpLootTables.roll(state.dropTier(), config.entriesForTier(state.dropTier()), ctx);
 

@@ -176,7 +176,8 @@ O arquivo `config/opdropmanhunt.json` é criado com os padrões na primeira exec
   "upgradeIntervalSeconds": 600,
   "letterRevealIntervalSeconds": 60,
   "entriesPerDropByTier": [4, 5, 6, 6, 7, 8],
-  "upToEnchantChance": 0.7
+  "upToEnchantChance": 0.7,
+  "extraArmorPieceChance": 0.5
 }
 ```
 
@@ -186,25 +187,47 @@ O arquivo `config/opdropmanhunt.json` é criado com os padrões na primeira exec
 | `letterRevealIntervalSeconds` | Intervalo entre revelações de letra |
 | `entriesPerDropByTier` | Entradas sorteadas por drop, uma por tier (índice 0 = tier 1) |
 | `upToEnchantChance` | Chance de um encantamento "até nível X" aparecer |
+| `extraArmorPieceChance` | Chance de a entrada de armadura soltar mais uma peça |
+
+### Peças de armadura
+
+A entrada de armadura sempre dá **uma** peça e, a cada peça entregue, tem
+`extraArmorPieceChance` de soltar mais uma, sorteando entre capacete, peitoral, calça
+e bota **sem repetir** — então no máximo sai o set completo. Com o padrão 0.5:
+
+| Peças | Chance |
+|---|---|
+| 1 | 50% |
+| 2 | 25% |
+| 3 | 12,5% |
+| 4 (set completo) | 12,5% |
+
+Vale para todos os tiers.
 
 ### Quanto cai por tier
 
 Com os valores padrão, e lembrando que algumas entradas soltam dois itens
 (arco + flecha, mace + wind charge, elytra + foguetes):
 
-| Tier | Pool | Sorteios | Itens por drop | Variedade |
+Medido por simulação (200 mil drops por tier), já contando as peças extras de armadura
+e as entradas que soltam dois itens:
+
+| Tier | Pool | Sorteios | Itens por drop | Média |
 |---|---|---|---|---|
-| 1 | 8 | 4 | 4 | 4 de 8 |
-| 2 | 8 | 5 | 5–6 | 5 de 8 |
-| 3 | 8 | 6 | 6–7 | 6 de 8 |
-| 4 | 11 | 6 | 6 | 6 de 11 |
-| 5 | 12 | 7 | 7–9 | 7 de 12 |
-| 6 | 10 | 8 | 8–9 | 8 de 10 |
+| 1 | 8 | 4 | 4–7 | 4,6 |
+| 2 | 8 | 5 | 5–9 | 6,4 |
+| 3 | 8 | 6 | 6–10 | 7,6 |
+| 4 | 11 | 6 | 6–9 | 6,6 |
+| 5 | 12 | 7 | 7–12 | 8,9 |
+| 6 | 10 | 8 | 8–12 | 9,6 |
 
 Todos os tiers sorteiam menos entradas do que o tamanho da pool, então nenhum drop
 entrega a tabela inteira — sempre sobra o que não saiu. Se você subir algum valor
 acima do tamanho da pool, o sorteio não é cortado: a pool é reabastecida e algumas
 entradas repetem no mesmo drop.
+
+A Netherite Sword do tier 6 tem peso 25 (contra 10 das outras armas), o que a faz
+aparecer em ~98% dos drops daquele tier.
 
 O arquivo é relido no `/manhunt start`, então dá para editar entre partidas sem
 reiniciar o servidor.
