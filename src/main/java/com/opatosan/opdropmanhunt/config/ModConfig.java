@@ -31,14 +31,18 @@ public final class ModConfig {
 	/** Intervalo entre revelacoes de letra do alvo OP para os Runners, em segundos. */
 	public int letterRevealIntervalSeconds = 60;
 
+	/** Padrao da escala de entradas por tier: 4 no tier 1 subindo ate 8 no tier 6. */
+	private static final int[] DEFAULT_ENTRIES_PER_TIER = {4, 5, 6, 6, 7, 8};
+
 	/**
 	 * Quantas entradas cada OP drop sorteia, por tier (indice 0 = tier 1).
 	 *
-	 * <p>Sobe junto com o tier: 6 no tier 1 ate 12 no tier 6. Se o valor passar do
-	 * tamanho da pool do tier, a pool e reabastecida e algumas entradas repetem no
+	 * <p>Todos os valores ficam abaixo do tamanho da pool do tier, entao cada drop
+	 * continua sendo uma amostra e nao a tabela inteira. Se voce subir algum valor
+	 * acima do tamanho da pool, a pool e reabastecida e algumas entradas repetem no
 	 * mesmo drop -- veja {@code OpLootTables.roll}.</p>
 	 */
-	public int[] entriesPerDropByTier = {6, 7, 8, 10, 11, 12};
+	public int[] entriesPerDropByTier = DEFAULT_ENTRIES_PER_TIER.clone();
 
 	/** Chance (0.0 - 1.0) de um encantamento marcado "ate nivel X" aparecer no item. */
 	public double upToEnchantChance = 0.7;
@@ -94,7 +98,7 @@ public final class ModConfig {
 		// Config antigo (de antes da escala por tier) nao tem a lista: usa o padrao e
 		// regrava o arquivo, para o campo novo aparecer para edicao.
 		if (this.entriesPerDropByTier == null || this.entriesPerDropByTier.length != GameState.MAX_DROP_TIER) {
-			this.entriesPerDropByTier = new int[] {6, 7, 8, 10, 11, 12};
+			this.entriesPerDropByTier = DEFAULT_ENTRIES_PER_TIER.clone();
 			return true;
 		}
 

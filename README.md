@@ -175,7 +175,7 @@ O arquivo `config/opdropmanhunt.json` é criado com os padrões na primeira exec
 {
   "upgradeIntervalSeconds": 600,
   "letterRevealIntervalSeconds": 60,
-  "entriesPerDropByTier": [6, 7, 8, 10, 11, 12],
+  "entriesPerDropByTier": [4, 5, 6, 6, 7, 8],
   "upToEnchantChance": 0.7
 }
 ```
@@ -194,19 +194,17 @@ Com os valores padrão, e lembrando que algumas entradas soltam dois itens
 
 | Tier | Pool | Sorteios | Itens por drop | Variedade |
 |---|---|---|---|---|
-| 1 | 8 | 6 | 6 | 6 de 8 |
-| 2 | 8 | 7 | 7–8 | 7 de 8 |
-| 3 | 8 | 8 | 9 | **pool inteira toda vez** |
-| 4 | 11 | 10 | 10 | 10 de 11 |
-| 5 | 12 | 11 | 11–13 | 11 de 12 |
-| 6 | 10 | 12 | 13–14 | **pool inteira + 2 repetidas** |
+| 1 | 8 | 4 | 4 | 4 de 8 |
+| 2 | 8 | 5 | 5–6 | 5 de 8 |
+| 3 | 8 | 6 | 6–7 | 6 de 8 |
+| 4 | 11 | 6 | 6 | 6 de 11 |
+| 5 | 12 | 7 | 7–9 | 7 de 12 |
+| 6 | 10 | 8 | 8–9 | 8 de 10 |
 
-Nos tiers 3 e 6 o número de sorteios alcança (ou passa) o tamanho da pool, então o
-drop deixa de ser surpresa: sai a tabela inteira. No tier 6, como o pedido passa da
-pool, ela é reabastecida e duas entradas repetem — as quantidades e os encantamentos
-continuam sorteados, mas a lista de itens é sempre a mesma. Se quiser variedade de
-volta nesses dois tiers, o caminho é baixar o valor no config ou aumentar a pool em
-`OpLootTables.java`.
+Todos os tiers sorteiam menos entradas do que o tamanho da pool, então nenhum drop
+entrega a tabela inteira — sempre sobra o que não saiu. Se você subir algum valor
+acima do tamanho da pool, o sorteio não é cortado: a pool é reabastecida e algumas
+entradas repetem no mesmo drop.
 
 O arquivo é relido no `/manhunt start`, então dá para editar entre partidas sem
 reiniciar o servidor.
